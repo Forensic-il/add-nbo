@@ -2,34 +2,26 @@
 #include<netinet/in.h>
 #include<stdlib.h>
 
-int Hex_to_Dec(uint32_t h);
+uint32_t File_load (char *path){
 
-int main()
-{
-    FILE *fp;
-    uint32_t nbo1;
-    fp = fopen("file1.bin","r");
-    fread(&nbo1,1,4,fp);
-    uint32_t hbo1 = ntohl(nbo1);
-
-    FILE *fp2;
-    uint32_t nbo2;
-    fp2 = fopen("file2.bin","r");
-    fread(&nbo2,1,4,fp2);
-    uint32_t hbo2 = ntohl(nbo2);
-
-    int a = Hex_to_Dec(hbo1);
-    int b = Hex_to_Dec(hbo2);
-
-    printf("%d(0x%x) + %d(0x%x) = %d(0x%x)",a,hbo1,b,hbo2,a+b,a+b);
+    uint32_t nbo;
+    FILE *fp = fopen(path, "r");
+    fread(&nbo,1,sizeof(uint32_t),fp);
     fclose(fp);
+    return ntohl(nbo);
+}
+
+int main(int argc, char* argv[])
+{
+
+    uint32_t n1 = File_load(argv[2]);
+    uint32_t n2 = File_load(argv[3]);
+
+
+    printf("%d(0x%x) + %d(0x%x) = %d(0x%x)",n1,n1,n2,n2,n1+n2,n1+n2);
+
     return 0;
 }
 
-int Hex_to_Dec(uint32_t h){
-    char s[8];
-    sprintf(s, "%x", h);
-    int dec = strtol(s,NULL,16);
-    return dec;
-}
+
 
